@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="http://localhost:8190/RentACarApp/style.css"/>
+    <style>
+        body{
+        background-image: url("/MyEnglishWordsApp/assets/img/not-found.svg");
+        background-repeat: no-repeat;
+        background-size: 2000px 1000px;
+        }
+    </style>
+
+    <title>Error Page!</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Something went wrong</h1>
+        <br>
+<!--        <h2>Can't open this web properly!</h2>-->
+        <div>
+            <span th:if="${errorMessage}" th:text="${errorMessage}">Error</span>
+        </div>
+        <br>
+
+        <div>
+            <a th:href="@{/home}" class="btn btn-warning" role="button">Go to the main page</a>
+        </div>
+    </div>
+</body>
+
+</html>
