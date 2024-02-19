@@ -24,7 +24,6 @@
     <h1 style="text-align: center;">My English Words App</h1>
 </div>
 
-<br/>
 <div class="container">
 
     <div class="row">
@@ -139,11 +138,11 @@
 
                     <colgroup>
                         <col style="width: 15%;">
-                        <col style="width: 31%;">
+                        <col style="width: 35%;">
                         <col style="width: 20%;">
-                        <col style="width: 10%;">
-                        <col style="width: 11%;">
-                        <col style="width: 8%;">
+                        <col style="width: 7%;">
+                        <col style="width: 13%;">
+                        <col style="width: 7%;">
                     </colgroup>
 
                     <thead class="table-dark">
@@ -151,7 +150,7 @@
                         <th>Word</th>
                         <th>Description</th>
                         <th>Translation</th>
-                        <th>Status</th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -162,7 +161,20 @@
                         <td><a th:text="${word.wordToLearn}" style="font-weight: bold;"></a></td>
                         <td><a th:text="${word.description}"></a></td>
                         <td><a th:text="${word.translation}"></a></td>
-                        <td><a th:text="${word.wordStatus}"></a></td>
+
+                        <td class="col">
+                            <div class="d-flex justify-content-between">
+                                <form th:action="@{/home/counterUpdate}" method="post">
+                                    <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                    <input type="hidden" name="currentCounterValue" th:value="${word.counter}"/>
+                                    <input type="hidden" name="dataSource" th:value="${''}"/>
+                                    <button class="btn btn-success" type="submit"
+                                            style="background-color: darkgreen;">
+                                        Learned
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
 
                         <td class="col">
                             <div class="d-flex justify-content-between">

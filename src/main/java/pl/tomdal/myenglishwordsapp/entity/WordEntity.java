@@ -1,13 +1,18 @@
 package pl.tomdal.myenglishwordsapp.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.proxy.HibernateProxy;
 import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -47,4 +52,16 @@ public class WordEntity {
     @OneToMany(mappedBy = "wordEntity")
     private List<SentenceEntity> sentenceEntities = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WordEntity that = (WordEntity) o;
+        return Objects.equals(wordToLearn, that.wordToLearn) && Objects.equals(description, that.description) && Objects.equals(translation, that.translation) && category == that.category && wordStatus == that.wordStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(wordToLearn, description, translation, category, wordStatus);
+    }
 }

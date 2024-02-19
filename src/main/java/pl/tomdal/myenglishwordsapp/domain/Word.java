@@ -7,6 +7,7 @@ import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @With
 @Builder
@@ -20,4 +21,17 @@ public class Word {
     WordStatus wordStatus;
     Integer counter;
     LocalDateTime timeStamp;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Word word = (Word) o;
+        return Objects.equals(wordToLearn, word.wordToLearn) && Objects.equals(description, word.description) && Objects.equals(translation, word.translation) && category == word.category && wordStatus == word.wordStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(wordToLearn, description, translation, category, wordStatus);
+    }
 }
