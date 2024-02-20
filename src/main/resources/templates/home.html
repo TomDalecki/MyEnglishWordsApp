@@ -155,17 +155,17 @@
                         </button>
                     </div>
 
-<!--                    <div class="nav-item">-->
-<!--                        <button class="nav-link" id="third-tab" data-bs-toggle="tab"-->
-<!--                                data-bs-target="#third-tab-pane"-->
-<!--                                type="button" role="tab" aria-controls="third-tab-pane" aria-selected="false"-->
-<!--                                onclick="openTab(event, 'third-tab-pane')"-->
-<!--                                style="color: black; border: 1px solid white;">TO DEV-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div class="nav-item">-->
+                    <!--                        <button class="nav-link" id="third-tab" data-bs-toggle="tab"-->
+                    <!--                                data-bs-target="#third-tab-pane"-->
+                    <!--                                type="button" role="tab" aria-controls="third-tab-pane" aria-selected="false"-->
+                    <!--                                onclick="openTab(event, 'third-tab-pane')"-->
+                    <!--                                style="color: black; border: 1px solid white;">TO DEV-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                 </div>
 
-
+                <!--PIERWSZA ZAKŁADKA-->
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="first-tab-pane" role="tabpanel"
                          aria-labelledby="first-tab">
@@ -242,15 +242,97 @@
 
                     </div>
 
-
+                    <!--DRUGA ZAKŁADKA-->
                     <div class="tab-pane fade show" id="second-tab-pane" role="tabpanel" aria-labelledby="second-tab">
-                        <!--                        TODO -->
-                    </div>
-<!--                    <div class="tab-pane fade show" id="third-tab-pane" role="tabpanel" aria-labelledby="third-tab">-->
-<!--                        &lt;!&ndash;                        TODO &ndash;&gt;-->
-<!--                    </div>-->
-                </div>
 
+                        <table class="table" style="width: 100%;">
+
+                            <colgroup>
+                                <col style="width: 35%;">
+                                <col style="width: 35%;">
+                                <col style="width: 8%;">
+                                <col style="width: 14%;">
+                                <col style="width: 8%;">
+                            </colgroup>
+
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Word</th>
+                                <th>Translation</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="word : ${randomWordsToLearn}">
+                                <td><a th:text="${word.translation}" style="font-weight: bold;"></a></td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="translation-text" style="font-weight: bold;"></span>
+                                        <button class="btn btn-success show-translation-btn"
+                                                style="background-color: darkgreen;">
+                                            Show translation
+                                        </button>
+                                        <span class="word-to-learn" style="display: none;"
+                                              th:text="${word.wordToLearn}"></span>
+                                    </div>
+                                </td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/counterUpdate}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="currentCounterValue" th:value="${word.counter}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-success" type="submit"
+                                                    style="background-color: darkgreen;">
+                                                Learned
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/statusUpdate}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-success" type="submit"
+                                                    style="background-color: mediumblue;">
+                                                Don't show
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/delete}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-danger" type="submit">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <!--TRZECIA ZAKŁADKA-->
+                    <!--                    <div class="tab-pane fade show" id="third-tab-pane" role="tabpanel" aria-labelledby="third-tab">-->
+                    <!--                        &lt;!&ndash;                        TODO &ndash;&gt;-->
+                    <!--                    </div>-->
+
+                </div>
             </div>
         </div>
 
@@ -334,6 +416,20 @@
     }
 </script>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var showButtons = document.querySelectorAll('.show-translation-btn');
+
+    showButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var translation = button.closest('tr').querySelector('.word-to-learn').textContent;
+            var translationSpan = button.closest('tr').querySelector('.translation-text');
+            translationSpan.textContent = translation;
+            button.style.display = 'none';
+        });
+    });
+    /*]]>*/
+</script>
 
 </body>
 </html>
