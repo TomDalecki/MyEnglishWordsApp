@@ -69,7 +69,8 @@
                 <div class="row">
                     <div class="col">
                         <a th:href="@{/home/{param}(param='phrasal_verb')}" class="btn btn-success" role="button"
-                           style="background-color: darkslategray; width: 180px; text-align: left;">Phrasals Exercises</a>
+                           style="background-color: darkslategray; width: 180px; text-align: left;">Phrasals
+                            Exercises</a>
                     </div>
                 </div>
             </div>
@@ -79,7 +80,8 @@
                 <div class="row">
                     <div class="col">
                         <a th:href="@{/home/{param}(param='adjective')}" class="btn btn-success" role="button"
-                           style="background-color: darkslategray; width: 180px; text-align: left;">Adjectives Exercises</a>
+                           style="background-color: darkslategray; width: 180px; text-align: left;">Adjectives
+                            Exercises</a>
                     </div>
                 </div>
             </div>
@@ -89,7 +91,8 @@
                 <div class="row">
                     <div class="col">
                         <a th:href="@{/home/{param}(param='adverb')}" class="btn btn-success" role="button"
-                           style="background-color: darkslategray; width: 180px; text-align: left;">Adverbs Exercises</a>
+                           style="background-color: darkslategray; width: 180px; text-align: left;">Adverbs
+                            Exercises</a>
                     </div>
                 </div>
             </div>
@@ -99,7 +102,8 @@
                 <div class="row">
                     <div class="col">
                         <a th:href="@{/home/{param}(param='antonym')}" class="btn btn-success" role="button"
-                           style="background-color: darkslategray; width: 180px; text-align: left;">Antonyms Exercises</a>
+                           style="background-color: darkslategray; width: 180px; text-align: left;">Antonyms
+                            Exercises</a>
                     </div>
                 </div>
             </div>
@@ -109,7 +113,8 @@
                 <div class="row">
                     <div class="col">
                         <a th:href="@{/home/{param}(param='expression')}" class="btn btn-success" role="button"
-                           style="background-color: darkslategray; width: 180px; text-align: left;">Expressions Exercises</a>
+                           style="background-color: darkslategray; width: 180px; text-align: left;">Expressions
+                            Exercises</a>
                     </div>
                 </div>
             </div>
@@ -125,87 +130,128 @@
             </div>
         </div>
 
-        <!--            TU ZACZYNAJĄ SIĘ TABELE-->
+        <!--            TU ZACZYNAJĄ SIĘ ZAKŁADKI I TABELE-->
 
         <div class="col-10">
             <div>
-                <h5 style="font-weight: bold;"></h5>
-            </div>
 
-            <div>
-            <br>
-                <table class="table" style="width: 100%;">
+                <div class="nav nav-tabs" id="myTab" role="tablist">
+                    <div class="nav-item">
+                        <button class="nav-link active" id="first-tab" data-bs-toggle="tab"
+                                data-bs-target="#first-tab-pane"
+                                type="button" role="tab" aria-controls="first-tab-pane" aria-selected="true"
+                                onclick="openTab(event, 'first-tab-pane')"
+                                style="color: black; border: 1px solid white;">EN -> PL
+                        </button>
+                    </div>
 
-                    <colgroup>
-                        <col style="width: 15%;">
-                        <col style="width: 35%;">
-                        <col style="width: 20%;">
-                        <col style="width: 7%;">
-                        <col style="width: 13%;">
-                        <col style="width: 7%;">
-                    </colgroup>
+                    <div class="nav-item">
+                        <button class="nav-link" id="second-tab" data-bs-toggle="tab"
+                                data-bs-target="#second-tab-pane"
+                                type="button" role="tab" aria-controls="second-tab-pane" aria-selected="false"
+                                onclick="openTab(event, 'second-tab-pane')"
+                                style="color: black; border: 1px solid white;">PL -> EN
+                        </button>
+                    </div>
 
-                    <thead class="table-dark">
-                    <tr>
-                        <th>Word</th>
-                        <th>Description</th>
-                        <th>Translation</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
+                    <div class="nav-item">
+                        <button class="nav-link" id="third-tab" data-bs-toggle="tab"
+                                data-bs-target="#third-tab-pane"
+                                type="button" role="tab" aria-controls="third-tab-pane" aria-selected="false"
+                                onclick="openTab(event, 'third-tab-pane')"
+                                style="color: black; border: 1px solid white;">TO DEV
+                        </button>
+                    </div>
+                </div>
 
-                    <tbody>
-                    <tr th:each="word : ${wordsToLearn}">
-                        <td><a th:text="${word.wordToLearn}" style="font-weight: bold;"></a></td>
-                        <td><a th:text="${word.description}"></a></td>
-                        <td><a th:text="${word.translation}"></a></td>
 
-                        <td class="col">
-                            <div class="d-flex justify-content-between">
-                                <form th:action="@{/home/counterUpdate}" method="post">
-                                    <input type="hidden" name="wordId" th:value="${word.wordId}"/>
-                                    <input type="hidden" name="currentCounterValue" th:value="${word.counter}"/>
-                                    <input type="hidden" name="dataSource" th:value="${''}"/>
-                                    <button class="btn btn-success" type="submit"
-                                            style="background-color: darkgreen;">
-                                        Learned
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="first-tab-pane" role="tabpanel"
+                         aria-labelledby="first-tab">
 
-                        <td class="col">
-                            <div class="d-flex justify-content-between">
-                                <form th:action="@{/home/statusUpdate}" method="post">
-                                    <input type="hidden" name="wordId" th:value="${word.wordId}"/>
-                                    <input type="hidden" name="dataSource" th:value="${''}"/>
-                                    <button class="btn btn-success" type="submit"
-                                            style="background-color: mediumblue;">
-                                        Don't show
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+                        <table class="table" style="width: 100%;">
 
-                        <td class="col">
-                            <div class="d-flex justify-content-between">
-                                <form th:action="@{/home/delete}" method="post">
-                                    <input type="hidden" name="wordId" th:value="${word.wordId}"/>
-                                    <input type="hidden" name="dataSource" th:value="${''}"/>
-                                    <button class="btn btn-danger" type="submit">
-                                        Delete
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            <colgroup>
+                                <col style="width: 15%;">
+                                <col style="width: 35%;">
+                                <col style="width: 20%;">
+                                <col style="width: 7%;">
+                                <col style="width: 13%;">
+                                <col style="width: 7%;">
+                            </colgroup>
+
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Word</th>
+                                <th>Description</th>
+                                <th>Translation</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="word : ${wordsToLearn}">
+                                <td><a th:text="${word.wordToLearn}" style="font-weight: bold;"></a></td>
+                                <td><a th:text="${word.description}"></a></td>
+                                <td><a th:text="${word.translation}"></a></td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/counterUpdate}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="currentCounterValue" th:value="${word.counter}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-success" type="submit"
+                                                    style="background-color: darkgreen;">
+                                                Learned
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/statusUpdate}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-success" type="submit"
+                                                    style="background-color: mediumblue;">
+                                                Don't show
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+
+                                <td class="col">
+                                    <div class="d-flex justify-content-between">
+                                        <form th:action="@{/home/delete}" method="post">
+                                            <input type="hidden" name="wordId" th:value="${word.wordId}"/>
+                                            <input type="hidden" name="dataSource" th:value="${''}"/>
+                                            <button class="btn btn-danger" type="submit">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                    <div class="tab-pane fade show" id="second-tab-pane" role="tabpanel" aria-labelledby="second-tab">
+                        <!--                        TODO -->
+                    </div>
+                    <div class="tab-pane fade show" id="third-tab-pane" role="tabpanel" aria-labelledby="third-tab">
+                        <!--                        TODO -->
+                    </div>
+                </div>
+
             </div>
         </div>
-
 
         <!-- Modal -->
         <div class="modal fade" id="myModal">
@@ -262,6 +308,31 @@
 
     </div>
 </div>
+
+
+<!-- SKRYPT DO OBSŁUGI ZAKŁADEK-->
+<script>
+    function openTab(event, tabId) {
+<!--        Ukryj wszystkie panele-->
+        var tabContent = document.getElementsByClassName("tab-pane");
+        for (var i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+        }
+
+<!--        Deaktywuj wszystkie przyciski-->
+        var tabButtons = document.getElementsByClassName("nav-link");
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+
+<!--        Pokaż wybrany panel-->
+        document.getElementById(tabId).style.display = "block";
+
+<!--        Aktywuj wybrany przycisk-->
+        event.currentTarget.classList.add("active");
+    }
+</script>
+
 
 </body>
 </html>

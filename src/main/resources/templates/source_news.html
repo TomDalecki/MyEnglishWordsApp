@@ -31,6 +31,21 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
+                        <form th:action="@{/home/saveWord}" method="post">
+                            <button class="btn btn-success" type="button" data-toggle="modal"
+                                    data-target="#myModal" data-category="${category}"
+                                    style="background-color: mediumblue; width: 180px; text-align: left;">
+                                <a>Add new word</a>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col">
                         <a th:href="@{/news/technology}" class="btn btn-success" role="button"
                            style="background-color: darkslategray; width: 180px; text-align: left;">Technology</a>
                     </div>
@@ -93,21 +108,6 @@
                     <div class="col">
                         <a th:href="@{/news/general}" class="btn btn-success" role="button"
                            style="background-color: darkslategray; width: 180px; text-align: left;">General</a>
-                    </div>
-                </div>
-            </div>
-            <br>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <form th:action="@{/home/saveWord}" method="post">
-                            <button class="btn btn-success" type="button" data-toggle="modal"
-                                    data-target="#myModal" data-category="${category}"
-                                    style="background-color: mediumblue; width: 180px; text-align: left;">
-                                <a>Add new word</a>
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>

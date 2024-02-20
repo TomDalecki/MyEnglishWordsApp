@@ -49,7 +49,7 @@ public class AppController {
         model.addAttribute("word", newWord);
         model.addAttribute("category", categoryValues);
         model.addAttribute("wordsCategory", wordsCategory);
-        return "wordsExercises";
+        return "words_exercises";
     }
 
     @PostMapping(value = "/home/saveWord")
