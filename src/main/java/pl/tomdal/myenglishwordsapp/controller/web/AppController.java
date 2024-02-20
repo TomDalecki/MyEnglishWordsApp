@@ -17,16 +17,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppController {
     private final WordService wordService;
+    private static final String PREFIX = "redirect:/";
 
     @GetMapping("/home")
     public String homePage(Model model, Word newWord, String dataSource){
+        int numberOfWordsInResult = 10;
         List<Word> allWordsToLearn = wordService.findAllToLearn();
-        List<Word> wordsToLearn = wordService.findWordsToLearn(allWordsToLearn);
+        List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue(allWordsToLearn);
+        List<Word> randomWordsToLearn = wordService
+                .prepareRandomListOfWordsToLearn(allWordsToLearn, numberOfWordsInResult);
 
         Category[] categoryValues = Category.values();
         Arrays.sort(categoryValues, Comparator.comparing(Enum::name));
 
         model.addAttribute("wordsToLearn", wordsToLearn);
+        model.addAttribute("randomWordsToLearn", randomWordsToLearn);
         model.addAttribute("word", newWord);
         model.addAttribute("dataSource", dataSource);
         model.addAttribute("category", categoryValues);
@@ -39,7 +44,7 @@ public class AppController {
 
         Category wordsCategory = wordService.wordCategoryFinder(text);
         List<Word> allWordsFromCategory = wordService.findAllByCategory(wordsCategory);
-        List<Word> wordsToLearn = wordService.findWordsToLearn(allWordsFromCategory);
+        List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue(allWordsFromCategory);
 
         Category[] categoryValues = Category.values();
         Arrays.sort(categoryValues, Comparator.comparing(Enum::name));
@@ -55,24 +60,24 @@ public class AppController {
     @PostMapping(value = "/home/saveWord")
     public String saveNewWord(@ModelAttribute Word newWord, String dataSource) {
         wordService.saveWord(newWord);
-        return "redirect:/" + dataSource;
+        return PREFIX + dataSource;
     }
 
     @PostMapping(value = "/home/statusUpdate")
     public String statusUpdate(Long wordId, String dataSource) {
         wordService.statusUpdate(wordId, WordStatus.LEARNED);
-        return "redirect:/home" + dataSource;
+        return PREFIX + "home" + dataSource;
     }
 
     @PostMapping(value = "/home/counterUpdate")
     public String worldCounterUpdate(Long wordId, Integer currentCounterValue, String dataSource) {
         wordService.worldCounterUpdate(wordId, currentCounterValue);
-        return "redirect:/home" + dataSource;
+        return PREFIX + "home" + dataSource;
     }
 
     @PostMapping(value = "/home/delete")
     public String deleteByWordId(Long wordId, String dataSource) {
         wordService.deleteByWordId(wordId);
-        return "redirect:/home" + dataSource;
+        return PREFIX + "home" + dataSource;
     }
 }
