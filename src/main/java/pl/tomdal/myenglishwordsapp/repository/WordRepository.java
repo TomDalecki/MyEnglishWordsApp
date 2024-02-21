@@ -19,6 +19,8 @@ public class WordRepository implements WordDAO {
 
     @Override
     public List<Word> findAllWordsToLearn() {
+        System.out.println(1);
+
         return wordJpaRepository.findAllWordsToLearn().stream()
                 .map(wordEntityMapper::mapFromEntity).toList();
     }

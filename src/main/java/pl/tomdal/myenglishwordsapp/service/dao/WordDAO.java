@@ -7,6 +7,8 @@ import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
 import java.util.List;
 
 public interface WordDAO {
+    List<Word> findAllWordsToLearn();
+
     List<Word> findWords(Category category, Integer numberOfWords);
 
     void saveWord(Word word);
@@ -18,6 +20,4 @@ public interface WordDAO {
     void wordCounterUpdate(Long wordId, Integer newCounterValue);
 
     void deleteByWordId(Long wordId);
-
-    List<Word> findAllWordsToLearn();
 }

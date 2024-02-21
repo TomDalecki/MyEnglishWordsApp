@@ -1,6 +1,5 @@
 package pl.tomdal.myenglishwordsapp.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.tomdal.myenglishwordsapp.domain.Word;
@@ -9,10 +8,7 @@ import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
 import pl.tomdal.myenglishwordsapp.service.dao.WordDAO;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static pl.tomdal.myenglishwordsapp.configuration.AppConfig.WORDS_IN_TABLE;
 
@@ -44,12 +40,18 @@ public class WordService {
                 .toList();
     }
 
-    public List<Word> prepareRandomListOfWordsToLearn(List<Word> allWordsToLearn, int numberOfWordsInResult) {
+    public List<Word> prepareRandomListOfWordsToLearn(List<Word> allWordsToLearn, Integer numberOfWordsInResult) {
         List<Word> result = new ArrayList<>();
+        Set<Integer> generatedRandomNumbers = new HashSet<>();
 
-        for (int i = 0; i < numberOfWordsInResult; i++) {
-            result.add(allWordsToLearn.get(this.random.nextInt(allWordsToLearn.size())));
+        while(generatedRandomNumbers.size() < numberOfWordsInResult){
+            generatedRandomNumbers.add(this.random.nextInt(allWordsToLearn.size()));
         }
+
+        for (Integer i : generatedRandomNumbers) {
+            result.add(allWordsToLearn.get(i));
+        }
+
         return result;
     }
 

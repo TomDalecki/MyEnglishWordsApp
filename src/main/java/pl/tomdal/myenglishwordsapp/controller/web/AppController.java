@@ -3,7 +3,10 @@ package pl.tomdal.myenglishwordsapp.controller.web;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import pl.tomdal.myenglishwordsapp.domain.Word;
 import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
@@ -18,10 +21,12 @@ import java.util.List;
 public class AppController {
     private final WordService wordService;
     private static final String PREFIX = "redirect:/";
+    private static final String PREFIX_HOME = "redirect:/home";
+
 
     @GetMapping("/home")
     public String homePage(Model model, Word newWord, String dataSource){
-        int numberOfWordsInResult = 10;
+        Integer numberOfWordsInResult = 10;
         List<Word> allWordsToLearn = wordService.findAllToLearn();
         List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue(allWordsToLearn);
         List<Word> randomWordsToLearn = wordService
@@ -66,18 +71,18 @@ public class AppController {
     @PostMapping(value = "/home/statusUpdate")
     public String statusUpdate(Long wordId, String dataSource) {
         wordService.statusUpdate(wordId, WordStatus.LEARNED);
-        return PREFIX + "home" + dataSource;
+        return PREFIX_HOME + dataSource;
     }
 
     @PostMapping(value = "/home/counterUpdate")
     public String worldCounterUpdate(Long wordId, Integer currentCounterValue, String dataSource) {
         wordService.worldCounterUpdate(wordId, currentCounterValue);
-        return PREFIX + "home" + dataSource;
+        return PREFIX_HOME + dataSource;
     }
 
     @PostMapping(value = "/home/delete")
     public String deleteByWordId(Long wordId, String dataSource) {
         wordService.deleteByWordId(wordId);
-        return PREFIX + "home" + dataSource;
+        return PREFIX_HOME + dataSource;
     }
 }
