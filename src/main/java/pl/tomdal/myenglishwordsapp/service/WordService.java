@@ -10,20 +10,21 @@ import pl.tomdal.myenglishwordsapp.service.dao.WordDAO;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static pl.tomdal.myenglishwordsapp.configuration.AppConfig.WORDS_IN_TABLE;
+import static pl.tomdal.myenglishwordsapp.configuration.AppConfig.*;
 
 @Service
 @RequiredArgsConstructor
 public class WordService {
     private final WordDAO wordDAO;
     private final Random random = new Random();
-
-    public List<Word> findWords(Category category, Integer numberOfWords) {
-        return wordDAO.findWords(category, numberOfWords);
-    }
+    private List<Word> wordsList = new ArrayList<>();
 
     public List<Word> findAllToLearn() {
-        return wordDAO.findAllWordsToLearn();
+        if (getIsCashUpToDate().equals(false)) {
+            wordsList = wordDAO.findAllWordsToLearn();
+            setIsCashUpToDate(true);
+        }
+        return wordsList;
     }
 
     public List<Word> findAllByCategory(Category category) {
@@ -44,7 +45,7 @@ public class WordService {
         List<Word> result = new ArrayList<>();
         Set<Integer> generatedRandomNumbers = new HashSet<>();
 
-        while(generatedRandomNumbers.size() < numberOfWordsInResult){
+        while (generatedRandomNumbers.size() < numberOfWordsInResult) {
             generatedRandomNumbers.add(this.random.nextInt(allWordsToLearn.size()));
         }
 
@@ -67,19 +68,23 @@ public class WordService {
                 .build();
 
         wordDAO.saveWord(word);
+        setIsCashUpToDate(false);
     }
 
     public void statusUpdate(Long wordId, WordStatus wordStatus) {
         wordDAO.statusUpdate(wordId, wordStatus);
+        setIsCashUpToDate(false);
     }
 
     public void worldCounterUpdate(Long wordId, Integer currentCounterValue) {
         Integer newCounterValue = currentCounterValue + 1;
         wordDAO.wordCounterUpdate(wordId, newCounterValue);
+        setIsCashUpToDate(false);
     }
 
     public void deleteByWordId(Long wordId) {
         wordDAO.deleteByWordId(wordId);
+        setIsCashUpToDate(false);
     }
 
     public Category wordCategoryFinder(String text) {

@@ -77,6 +77,7 @@ public class AppController {
     @PostMapping(value = "/home/counterUpdate")
     public String worldCounterUpdate(Long wordId, Integer currentCounterValue, String dataSource) {
         wordService.worldCounterUpdate(wordId, currentCounterValue);
+
         return PREFIX_HOME + dataSource;
     }
 
