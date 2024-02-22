@@ -27,7 +27,7 @@ public class WordService {
         return wordsList;
     }
 
-    public List<Word> findAllByCategory(Category category) {
+    public List<Word> findAllToLearnByCategory(Category category) {
         return wordDAO.findAllByCategory(category);
     }
 

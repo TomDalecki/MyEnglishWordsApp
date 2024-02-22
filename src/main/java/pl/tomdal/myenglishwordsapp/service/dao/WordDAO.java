@@ -9,8 +9,6 @@ import java.util.List;
 public interface WordDAO {
     List<Word> findAllWordsToLearn();
 
-    List<Word> findWords(Category category, Integer numberOfWords);
-
     void saveWord(Word word);
 
     List<Word> findAllByCategory(Category category);

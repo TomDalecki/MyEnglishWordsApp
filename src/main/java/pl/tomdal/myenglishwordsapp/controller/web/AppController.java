@@ -48,7 +48,7 @@ public class AppController {
     public String nounsSite(@PathVariable String text, Model model, Word newWord){
 
         Category wordsCategory = wordService.wordCategoryFinder(text);
-        List<Word> allWordsFromCategory = wordService.findAllByCategory(wordsCategory);
+        List<Word> allWordsFromCategory = wordService.findAllToLearnByCategory(wordsCategory);
         List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue(allWordsFromCategory);
 
         Category[] categoryValues = Category.values();
