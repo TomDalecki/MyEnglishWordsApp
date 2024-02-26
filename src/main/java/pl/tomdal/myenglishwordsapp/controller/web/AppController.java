@@ -27,10 +27,10 @@ public class AppController {
     @GetMapping("/home")
     public String homePage(Model model, Word newWord, String dataSource){
         Integer numberOfWordsInResult = 10;
-        List<Word> allWordsToLearn = wordService.findAllToLearn();
-        List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue(allWordsToLearn);
+
+        List<Word> wordsToLearn = wordService.findWordsToLearnByCounterValue();
         List<Word> randomWordsToLearn = wordService
-                .prepareRandomListOfWordsToLearn(allWordsToLearn, numberOfWordsInResult);
+                .prepareRandomListOfWordsToLearn(numberOfWordsInResult);
 
         Category[] categoryValues = Category.values();
         Arrays.sort(categoryValues, Comparator.comparing(Enum::name));
@@ -55,7 +55,6 @@ public class AppController {
         Arrays.sort(categoryValues, Comparator.comparing(Enum::name));
 
         model.addAttribute("wordsToLearn", wordsToLearn);
-        model.addAttribute("allWords", allWordsFromCategory);
         model.addAttribute("word", newWord);
         model.addAttribute("category", categoryValues);
         model.addAttribute("wordsCategory", wordsCategory);

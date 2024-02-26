@@ -28,6 +28,7 @@ public class WordRepository implements WordDAO {
 
     @Override
     public List<Word> findAllByCategory(Category category) {
+        log.info("Pobrałem WordsByCategory z DB");
         return wordJpaRepository.findAllByCategory(category).stream()
                 .map(wordEntityMapper::mapFromEntity).toList();
     }

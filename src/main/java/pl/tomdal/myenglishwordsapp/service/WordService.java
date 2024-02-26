@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.tomdal.myenglishwordsapp.domain.Word;
 import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
+import pl.tomdal.myenglishwordsapp.service.cash.Cash;
 import pl.tomdal.myenglishwordsapp.service.dao.WordDAO;
 
 import java.time.LocalDateTime;
@@ -17,40 +18,51 @@ import static pl.tomdal.myenglishwordsapp.configuration.AppConfig.*;
 public class WordService {
     private final WordDAO wordDAO;
     private final Random random = new Random();
-    private List<Word> wordsList = new ArrayList<>();
+    private final Cash cash;
 
-    public List<Word> findAllToLearn() {
+    void checkCash() {
         if (getIsCashUpToDate().equals(false)) {
-            wordsList = wordDAO.findAllWordsToLearn();
+            cash.writeToCash(wordDAO.findAllWordsToLearn());
             setIsCashUpToDate(true);
         }
-        return wordsList;
     }
 
     public List<Word> findAllToLearnByCategory(Category category) {
         return wordDAO.findAllByCategory(category);
     }
 
-    public List<Word> findWordsToLearnByCounterValue(List<Word> allWords) {
+    public List<Word> findWordsToLearnByCounterValue() {
+        checkCash();
+
         Comparator<Word> comparing = Comparator.comparing(Word::getCounter);
 
-        return allWords.stream()
+        return cash.readFromCash().stream()
                 .filter(word -> word.getWordStatus().equals(WordStatus.TO_LEARN))
                 .sorted(comparing)
                 .limit(WORDS_IN_TABLE)
                 .toList();
     }
 
-    public List<Word> prepareRandomListOfWordsToLearn(List<Word> allWordsToLearn, Integer numberOfWordsInResult) {
+    public List<Word> findWordsToLearnByCounterValue(List<Word> someWordsList) {
+        Comparator<Word> comparing = Comparator.comparing(Word::getCounter);
+
+        return someWordsList.stream()
+                .filter(word -> word.getWordStatus().equals(WordStatus.TO_LEARN))
+                .sorted(comparing)
+                .limit(WORDS_IN_TABLE)
+                .toList();
+    }
+
+    public List<Word> prepareRandomListOfWordsToLearn(Integer numberOfWordsInResult) {
         List<Word> result = new ArrayList<>();
         Set<Integer> generatedRandomNumbers = new HashSet<>();
 
         while (generatedRandomNumbers.size() < numberOfWordsInResult) {
-            generatedRandomNumbers.add(this.random.nextInt(allWordsToLearn.size()));
+            generatedRandomNumbers.add(this.random.nextInt(cash.readFromCash().size()));
         }
 
         for (Integer i : generatedRandomNumbers) {
-            result.add(allWordsToLearn.get(i));
+            result.add(cash.readFromCash().get(i));
         }
 
         return result;

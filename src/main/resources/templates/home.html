@@ -329,9 +329,12 @@
                             <div class="row">
                                 <div class="col">
                                     <a th:href="@{/home}" class="btn btn-success" role="button"
-                                       style="background-color: darkgreen; width: 180px; text-align: left;">
+                                       style="background-color: darkgreen; width: 180px; text-align: left;" onclick="refreshTable()">
                                         Refresh table
                                     </a>
+
+<!--                                    <button onclick="refreshTab()">Refresh</button>-->
+
                                 </div>
                             </div>
                         </div>
@@ -403,6 +406,30 @@
     </div>
 </div>
 
+<!--SKRYPT DO BLOKOWANIA DRUGIEJ ZAKŁADKI PO ODŚWIEŻENIU-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function refreshTable() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/home/refreshhhhh', true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+
+          // Po udanym odświeżeniu wykonaj zmianę widoczności zakładek
+          refreshTab();
+        }
+      };
+      xhr.send();
+    }
+
+    function refreshTab() {
+      // Tutaj umieść kod przełączający widoczność między zakładkami
+      document.getElementById('first-tab-pane').style.display = 'none';
+      document.getElementById('second-tab-pane').style.display = 'block';
+    }
+    /*]]>*/
+</script>
+
 
 <!-- SKRYPT DO OBSŁUGI ZAKŁADEK-->
 <script>
@@ -427,6 +454,8 @@
     }
 </script>
 
+
+<!--SKRYPT ODKRYWA TŁUMACZENIE I UKRYWA BUTTON-->
 <script th:inline="javascript">
     /*<![CDATA[*/
     var showButtons = document.querySelectorAll('.show-translation-btn');
