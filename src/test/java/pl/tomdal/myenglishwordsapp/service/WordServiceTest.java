@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.tomdal.myenglishwordsapp.configuration.AppConfig;
 import pl.tomdal.myenglishwordsapp.domain.Word;
+import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.service.cash.Cache;
 import pl.tomdal.myenglishwordsapp.service.dao.WordDAO;
 import pl.tomdal.myenglishwordsapp.util.TestDataFixtures;
@@ -112,7 +113,7 @@ class WordServiceTest {
     }
 
     @Test
-    void prepareRandomListOfWordsToLearn() {
+    void thatPreparationRandomListOfWordsToLearnWorksCorrectly() {
         //given
         int numberOfWordsInResult = 5;
         List<Word> wordsList = new ArrayList<>();
@@ -162,5 +163,35 @@ class WordServiceTest {
                 .wordCounterUpdate(wordId, currentCounterValue + 1);
 
         assertFalse(AppConfig.getIsCacheUpToDate());
+    }
+
+    @Test
+    void thatDeleteByWordIdChangesCacheStatusCorrectly(){
+        //given
+        Long wordId = 1L;
+
+        //when
+        wordService.deleteByWordId(wordId);
+
+        //then
+        assertFalse(AppConfig.getIsCacheUpToDate());
+    }
+
+    @Test
+    void thatWordCategoryFinderWorksCorrectly(){
+        //given
+        String correctText = "verb";
+        String incorrectText = "vverb";
+
+        //when
+        Category result1 = wordService.wordCategoryFinder(correctText);
+
+        //then
+        assertEquals(Category.VERB, result1);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> wordService.wordCategoryFinder(incorrectText));
+
+        assertEquals("No enum with text " + incorrectText + " found", ex.getMessage());
     }
 }
