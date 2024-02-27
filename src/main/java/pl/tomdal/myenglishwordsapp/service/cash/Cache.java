@@ -4,8 +4,8 @@ import pl.tomdal.myenglishwordsapp.domain.Word;
 
 import java.util.List;
 
-public interface Cash {
-    void writeToCash(List<Word> wordList);
+public interface Cache {
+    void writeToCache(List<Word> wordList);
 
-    List<Word> readFromCash();
+    List<Word> readFromCache();
 }

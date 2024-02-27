@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.tomdal.myenglishwordsapp.domain.Word;
 import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
-import pl.tomdal.myenglishwordsapp.service.cash.Cash;
+import pl.tomdal.myenglishwordsapp.service.cash.Cache;
 import pl.tomdal.myenglishwordsapp.service.dao.WordDAO;
 
 import java.time.LocalDateTime;
@@ -18,12 +18,12 @@ import static pl.tomdal.myenglishwordsapp.configuration.AppConfig.*;
 public class WordService {
     private final WordDAO wordDAO;
     private final Random random = new Random();
-    private final Cash cash;
+    private final Cache cache;
 
-    void checkCash() {
-        if (getIsCashUpToDate().equals(false)) {
-            cash.writeToCash(wordDAO.findAllWordsToLearn());
-            setIsCashUpToDate(true);
+    void checkCache() {
+        if (getIsCacheUpToDate().equals(false)) {
+            cache.writeToCache(wordDAO.findAllWordsToLearn());
+            setIsCacheUpToDate(true);
         }
     }
 
@@ -32,11 +32,11 @@ public class WordService {
     }
 
     public List<Word> findWordsToLearnByCounterValue() {
-        checkCash();
+        checkCache();
 
-        Comparator<Word> comparing = Comparator.comparing(Word::getCounter);
+        Comparator<Word> comparing = getWordComparator();
 
-        return cash.readFromCash().stream()
+        return cache.readFromCache().stream()
                 .filter(word -> word.getWordStatus().equals(WordStatus.TO_LEARN))
                 .sorted(comparing)
                 .limit(WORDS_IN_TABLE)
@@ -44,7 +44,8 @@ public class WordService {
     }
 
     public List<Word> findWordsToLearnByCounterValue(List<Word> someWordsList) {
-        Comparator<Word> comparing = Comparator.comparing(Word::getCounter);
+
+        Comparator<Word> comparing = getWordComparator();
 
         return someWordsList.stream()
                 .filter(word -> word.getWordStatus().equals(WordStatus.TO_LEARN))
@@ -55,17 +56,23 @@ public class WordService {
 
     public List<Word> prepareRandomListOfWordsToLearn(Integer numberOfWordsInResult) {
         List<Word> result = new ArrayList<>();
-        Set<Integer> generatedRandomNumbers = new HashSet<>();
 
-        while (generatedRandomNumbers.size() < numberOfWordsInResult) {
-            generatedRandomNumbers.add(this.random.nextInt(cash.readFromCash().size()));
-        }
+        Integer drawnRange = cache.readFromCache().size();
+        Set<Integer> randomDigits = drawRandomDigits(numberOfWordsInResult, drawnRange);
 
-        for (Integer i : generatedRandomNumbers) {
-            result.add(cash.readFromCash().get(i));
+        for (Integer i : randomDigits) {
+            result.add(cache.readFromCache().get(i));
         }
 
         return result;
+    }
+
+    public Set<Integer> drawRandomDigits(Integer digitsInResult, Integer drawnRange) {
+        Set<Integer> randomDigits = new HashSet<>();
+        while (randomDigits.size() < digitsInResult) {
+            randomDigits.add(this.random.nextInt(drawnRange));
+        }
+        return randomDigits;
     }
 
     public void saveWord(Word dataFromForm) {
@@ -80,23 +87,23 @@ public class WordService {
                 .build();
 
         wordDAO.saveWord(word);
-        setIsCashUpToDate(false);
+        setIsCacheUpToDate(false);
     }
 
     public void statusUpdate(Long wordId, WordStatus wordStatus) {
         wordDAO.statusUpdate(wordId, wordStatus);
-        setIsCashUpToDate(false);
+        setIsCacheUpToDate(false);
     }
 
     public void worldCounterUpdate(Long wordId, Integer currentCounterValue) {
         Integer newCounterValue = currentCounterValue + 1;
         wordDAO.wordCounterUpdate(wordId, newCounterValue);
-        setIsCashUpToDate(false);
+        setIsCacheUpToDate(false);
     }
 
     public void deleteByWordId(Long wordId) {
         wordDAO.deleteByWordId(wordId);
-        setIsCashUpToDate(false);
+        setIsCacheUpToDate(false);
     }
 
     public Category wordCategoryFinder(String text) {
@@ -106,5 +113,9 @@ public class WordService {
             }
         }
         throw new IllegalArgumentException("No enum with text " + text + " found");
+    }
+
+    private static Comparator<Word> getWordComparator() {
+        return Comparator.comparing(Word::getCounter);
     }
 }
