@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.proxy.HibernateProxy;
 import pl.tomdal.myenglishwordsapp.entity.enums.Category;
 import pl.tomdal.myenglishwordsapp.entity.enums.WordStatus;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,7 +48,7 @@ public class WordEntity {
     private LocalDateTime timeStamp;
 
     @OneToMany(mappedBy = "wordEntity")
-    private List<SentenceEntity> sentenceEntities = new ArrayList<>();
+    private List<SentenceEntity> sentenceEntities;
 
     @Override
     public boolean equals(Object o) {
